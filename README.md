@@ -1,0 +1,2 @@
+# equanimity
+Experiments in AI
