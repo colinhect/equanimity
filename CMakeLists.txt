@@ -4,15 +4,19 @@ project(Equanimity CXX)
 find_package(OpenCL REQUIRED)
 
 set(SOURCE
-    Source/Neural/Layer.h
-    Source/Neural/MultilayerPerceptron.h
     Source/Main.cpp
 	)
-
 source_group("Source" FILES ${SOURCE})
+
+set(SOURCE_NEURAL
+    Source/Neural/Layer.h
+    Source/Neural/MultilayerPerceptron.h
+	)
+source_group("Source\\Neural" FILES ${SOURCE_NEURAL})
 
 set(SOURCE_FILES
 	${SOURCE}
+	${SOURCE_NEURAL}
 	)
 	
 include_directories(Source)
