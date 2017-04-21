@@ -1,12 +1,14 @@
 #pragma once
 
-#include "Neural/MultilayerPerceptron.h"
+#include "Neural/NeuralNetwork.h"
 
 int main()
 {
-    MultilayerPerceptron perceptron;
-    perceptron.BuildLayer(InputLayer::Builder().Size(28 * 28));
-    perceptron.BuildLayer(FullyConnectedLayer::Builder());
+    NeuralNetwork network = NeuralNetworkBuilder()
+        .Layer(InputBuilder().Size(28 * 28))
+        .Layer(FullyConnectedBuilder())
+        .Layer(ActivationBuilder().Sigmoid())
+        .Build();
 
     return 0;
 }
