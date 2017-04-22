@@ -1,2 +1,5 @@
 Build/
 
+/Equanimity.dir/**/*
+/x64/**/*
+*.log
