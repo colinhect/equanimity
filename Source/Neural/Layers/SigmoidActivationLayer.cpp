@@ -21,28 +21,12 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 ///////////////////////////////////////////////////////////////////////////////
-#pragma once
+#include "SigmoidActivationLayer.h"
 
-#include <memory>
-#include <vector>
+using namespace equanimity;
 
-#include "Neural/NeuralNetworkLayer.h"
-
-namespace equanimity
+SigmoidActivationLayer::SigmoidActivationLayer(NeuralNetworkLayer& previousLayer, unsigned size) :
+    ActivationLayer(previousLayer, size),
+    _biases(size, 0.0f)
 {
-
-class NeuralNetwork
-{
-    friend class NeuralNetworkBuilder;
-public:
-    NeuralNetwork(NeuralNetwork&& network);
-
-    NeuralNetwork& operator=(NeuralNetwork&& network);
-
-private:
-    NeuralNetwork(std::vector<std::unique_ptr<NeuralNetworkLayer>>&& layers);
-
-    std::vector<std::unique_ptr<NeuralNetworkLayer>> _layers;
-};
-
 }

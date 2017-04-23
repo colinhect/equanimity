@@ -21,28 +21,29 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 ///////////////////////////////////////////////////////////////////////////////
-#pragma once
+#include "FullyConnectedLayer.h"
 
-#include <memory>
-#include <vector>
+using namespace equanimity;
 
-#include "Neural/NeuralNetworkLayer.h"
-
-namespace equanimity
+FullyConnectedLayer::Builder& FullyConnectedLayer::Builder::Size(unsigned size)
 {
+    _size = size;
+    return *this;
+}
 
-class NeuralNetwork
+std::unique_ptr<NeuralNetworkLayer> FullyConnectedLayer::Builder::Build(NeuralNetworkLayer& previousLayer)
 {
-    friend class NeuralNetworkBuilder;
-public:
-    NeuralNetwork(NeuralNetwork&& network);
+    unsigned size = _size;
+    if (size == 0)
+    {
+        size = previousLayer.GetSize();
+    }
 
-    NeuralNetwork& operator=(NeuralNetwork&& network);
+    return std::make_unique<FullyConnectedLayer>(previousLayer, size);
+}
 
-private:
-    NeuralNetwork(std::vector<std::unique_ptr<NeuralNetworkLayer>>&& layers);
-
-    std::vector<std::unique_ptr<NeuralNetworkLayer>> _layers;
-};
-
+FullyConnectedLayer::FullyConnectedLayer(NeuralNetworkLayer& previousLayer, unsigned size) :
+    NeuralNetworkLayer(previousLayer, size),
+    _weights(previousLayer.GetSize() * GetSize(), 0.0f)
+{
 }

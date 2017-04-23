@@ -21,28 +21,30 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 ///////////////////////////////////////////////////////////////////////////////
-#pragma once
+#include "NeuralNetworkLayer.h"
 
-#include <memory>
-#include <vector>
+using namespace equanimity;
 
-#include "Neural/NeuralNetworkLayer.h"
-
-namespace equanimity
+NeuralNetworkLayer::NeuralNetworkLayer()
 {
+}
 
-class NeuralNetwork
+NeuralNetworkLayer::NeuralNetworkLayer(unsigned size) :
+    _size(size)
 {
-    friend class NeuralNetworkBuilder;
-public:
-    NeuralNetwork(NeuralNetwork&& network);
+}
 
-    NeuralNetwork& operator=(NeuralNetwork&& network);
+NeuralNetworkLayer::NeuralNetworkLayer(NeuralNetworkLayer& previousLayer, unsigned size) :
+    _previousLayer(&previousLayer),
+    _size(size)
+{
+}
 
-private:
-    NeuralNetwork(std::vector<std::unique_ptr<NeuralNetworkLayer>>&& layers);
+NeuralNetworkLayer::~NeuralNetworkLayer()
+{
+}
 
-    std::vector<std::unique_ptr<NeuralNetworkLayer>> _layers;
-};
-
+unsigned NeuralNetworkLayer::GetSize() const
+{
+    return _size;
 }

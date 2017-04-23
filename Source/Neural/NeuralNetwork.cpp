@@ -21,28 +21,22 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 ///////////////////////////////////////////////////////////////////////////////
-#pragma once
+#include "Neural/NeuralNetwork.h"
 
-#include <memory>
-#include <vector>
+using namespace equanimity;
 
-#include "Neural/NeuralNetworkLayer.h"
-
-namespace equanimity
+NeuralNetwork::NeuralNetwork(NeuralNetwork&& network) :
+    _layers(std::move(network._layers))
 {
+}
 
-class NeuralNetwork
+NeuralNetwork& NeuralNetwork::operator=(NeuralNetwork&& network)
 {
-    friend class NeuralNetworkBuilder;
-public:
-    NeuralNetwork(NeuralNetwork&& network);
+    _layers = std::move(network._layers);
+    return *this;
+}
 
-    NeuralNetwork& operator=(NeuralNetwork&& network);
-
-private:
-    NeuralNetwork(std::vector<std::unique_ptr<NeuralNetworkLayer>>&& layers);
-
-    std::vector<std::unique_ptr<NeuralNetworkLayer>> _layers;
-};
-
+NeuralNetwork::NeuralNetwork(std::vector<std::unique_ptr<NeuralNetworkLayer>>&& layers) :
+    _layers(std::move(layers))
+{
 }

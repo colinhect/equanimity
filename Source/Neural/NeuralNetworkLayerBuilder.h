@@ -23,26 +23,26 @@
 ///////////////////////////////////////////////////////////////////////////////
 #pragma once
 
+#include <stdexcept>
 #include <memory>
-#include <vector>
 
 #include "Neural/NeuralNetworkLayer.h"
 
 namespace equanimity
 {
 
-class NeuralNetwork
+class NeuralNetworkLayerBuilder
 {
-    friend class NeuralNetworkBuilder;
 public:
-    NeuralNetwork(NeuralNetwork&& network);
+    virtual std::unique_ptr<NeuralNetworkLayer> Build();
+    virtual std::unique_ptr<NeuralNetworkLayer> Build(NeuralNetworkLayer& previousLayer);
+};
 
-    NeuralNetwork& operator=(NeuralNetwork&& network);
-
-private:
-    NeuralNetwork(std::vector<std::unique_ptr<NeuralNetworkLayer>>&& layers);
-
-    std::vector<std::unique_ptr<NeuralNetworkLayer>> _layers;
+class NeuralNetworkBuildError :
+    public std::runtime_error
+{
+public:
+    explicit NeuralNetworkBuildError(const std::string& message);
 };
 
 }

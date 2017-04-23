@@ -27,22 +27,31 @@
 #include <vector>
 
 #include "Neural/NeuralNetworkLayer.h"
+#include "Neural/NeuralNetworkLayerBuilder.h"
 
 namespace equanimity
 {
 
-class NeuralNetwork
+class FullyConnectedLayer :
+    public NeuralNetworkLayer
 {
-    friend class NeuralNetworkBuilder;
 public:
-    NeuralNetwork(NeuralNetwork&& network);
+    class Builder :
+        public NeuralNetworkLayerBuilder
+    {
+    public:
+        Builder& Size(unsigned size);
 
-    NeuralNetwork& operator=(NeuralNetwork&& network);
+        std::unique_ptr<NeuralNetworkLayer> Build(NeuralNetworkLayer& previousLayer) override;
+
+    private:
+        unsigned _size{ 0 };
+    };
+
+    FullyConnectedLayer(NeuralNetworkLayer& previousLayer, unsigned size);
 
 private:
-    NeuralNetwork(std::vector<std::unique_ptr<NeuralNetworkLayer>>&& layers);
-
-    std::vector<std::unique_ptr<NeuralNetworkLayer>> _layers;
+    std::vector<float> _weights;
 };
 
 }

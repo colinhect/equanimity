@@ -23,26 +23,21 @@
 ///////////////////////////////////////////////////////////////////////////////
 #pragma once
 
-#include <memory>
 #include <vector>
 
-#include "Neural/NeuralNetworkLayer.h"
+#include "Neural/Layers/ActivationLayer.h"
 
 namespace equanimity
 {
 
-class NeuralNetwork
+class SigmoidActivationLayer :
+    public ActivationLayer
 {
-    friend class NeuralNetworkBuilder;
 public:
-    NeuralNetwork(NeuralNetwork&& network);
-
-    NeuralNetwork& operator=(NeuralNetwork&& network);
+    SigmoidActivationLayer(NeuralNetworkLayer& previousLayer, unsigned size);
 
 private:
-    NeuralNetwork(std::vector<std::unique_ptr<NeuralNetworkLayer>>&& layers);
-
-    std::vector<std::unique_ptr<NeuralNetworkLayer>> _layers;
+    std::vector<float> _biases;
 };
 
 }

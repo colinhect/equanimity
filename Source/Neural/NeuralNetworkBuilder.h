@@ -26,23 +26,30 @@
 #include <memory>
 #include <vector>
 
-#include "Neural/NeuralNetworkLayer.h"
+#include "Neural/NeuralNetwork.h"
+#include "Neural/NeuralNetworkLayerBuilder.h"
 
 namespace equanimity
 {
 
-class NeuralNetwork
+class NeuralNetworkBuilder
 {
-    friend class NeuralNetworkBuilder;
 public:
-    NeuralNetwork(NeuralNetwork&& network);
 
-    NeuralNetwork& operator=(NeuralNetwork&& network);
+    template <typename LayerType>
+    typename LayerType::Builder& AddLayer();
+
+    NeuralNetwork Build();
 
 private:
-    NeuralNetwork(std::vector<std::unique_ptr<NeuralNetworkLayer>>&& layers);
-
-    std::vector<std::unique_ptr<NeuralNetworkLayer>> _layers;
+    std::vector<std::unique_ptr<NeuralNetworkLayerBuilder>> _layerBuilders;
 };
+
+template <typename LayerType>
+typename LayerType::Builder& NeuralNetworkBuilder::AddLayer()
+{
+    _layerBuilders.emplace_back(new LayerType::Builder());
+    return *reinterpret_cast<LayerType::Builder*>(_layerBuilders.back().get());
+}
 
 }

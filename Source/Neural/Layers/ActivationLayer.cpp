@@ -21,28 +21,43 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 ///////////////////////////////////////////////////////////////////////////////
-#pragma once
+#include "ActivationLayer.h"
 
-#include <memory>
-#include <vector>
+#include "Neural/Layers/SigmoidActivationLayer.h"
 
-#include "Neural/NeuralNetworkLayer.h"
+using namespace equanimity;
 
-namespace equanimity
+ActivationLayer::Builder& ActivationLayer::Builder::Size(unsigned size)
 {
+    _size = size;
+    return *this;
+}
 
-class NeuralNetwork
+ActivationLayer::Builder& ActivationLayer::Builder::Sigmoid()
 {
-    friend class NeuralNetworkBuilder;
-public:
-    NeuralNetwork(NeuralNetwork&& network);
+    _sigmoid = true;
+    return *this;
+}
 
-    NeuralNetwork& operator=(NeuralNetwork&& network);
+std::unique_ptr<NeuralNetworkLayer> ActivationLayer::Builder::Build(NeuralNetworkLayer& previousLayer)
+{
+    unsigned size = _size;
+    if (size == 0)
+    {
+        size = previousLayer.GetSize();
+    }
 
-private:
-    NeuralNetwork(std::vector<std::unique_ptr<NeuralNetworkLayer>>&& layers);
+    if (_sigmoid)
+    {
+        return std::make_unique<SigmoidActivationLayer>(previousLayer, size);
+    }
+    else
+    {
+        throw NeuralNetworkBuildError("No activation layer type specified");
+    }
+}
 
-    std::vector<std::unique_ptr<NeuralNetworkLayer>> _layers;
-};
-
+ActivationLayer::ActivationLayer(NeuralNetworkLayer& previousLayer, unsigned size) :
+    NeuralNetworkLayer(previousLayer, size)
+{
 }

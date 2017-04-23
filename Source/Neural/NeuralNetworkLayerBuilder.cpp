@@ -21,28 +21,24 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 ///////////////////////////////////////////////////////////////////////////////
-#pragma once
+#include "NeuralNetworkLayerBuilder.h"
 
-#include <memory>
-#include <vector>
+using namespace equanimity;
 
-#include "Neural/NeuralNetworkLayer.h"
-
-namespace equanimity
+std::unique_ptr<NeuralNetworkLayer> NeuralNetworkLayerBuilder::Build()
 {
+    throw NeuralNetworkBuildError("Builder requires previous layer");
+    return std::unique_ptr<NeuralNetworkLayer>();
+}
 
-class NeuralNetwork
+std::unique_ptr<NeuralNetworkLayer> NeuralNetworkLayerBuilder::Build(NeuralNetworkLayer& previousLayer)
 {
-    friend class NeuralNetworkBuilder;
-public:
-    NeuralNetwork(NeuralNetwork&& network);
+    (void)previousLayer;
+    throw NeuralNetworkBuildError("Builder requires no previous layer");
+    return std::unique_ptr<NeuralNetworkLayer>();
+}
 
-    NeuralNetwork& operator=(NeuralNetwork&& network);
-
-private:
-    NeuralNetwork(std::vector<std::unique_ptr<NeuralNetworkLayer>>&& layers);
-
-    std::vector<std::unique_ptr<NeuralNetworkLayer>> _layers;
-};
-
+NeuralNetworkBuildError::NeuralNetworkBuildError(const std::string& message) :
+    std::runtime_error(std::string("Failed to build neural network: ") + message)
+{
 }
