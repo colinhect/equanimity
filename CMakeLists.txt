@@ -13,6 +13,8 @@ set(SOURCE_NEURAL
     Source/Neural/NeuralNetwork.h
     Source/Neural/NeuralNetworkBuilder.cpp
     Source/Neural/NeuralNetworkBuilder.h
+    Source/Neural/NeuralNetworkEngine.cpp
+    Source/Neural/NeuralNetworkEngine.h
     Source/Neural/NeuralNetworkLayer.cpp
     Source/Neural/NeuralNetworkLayer.h
     Source/Neural/NeuralNetworkLayerBuilder.cpp
@@ -27,6 +29,8 @@ set(SOURCE_NEURAL_LAYERS
     Source/Neural/Layers/FullyConnectedLayer.h
     Source/Neural/Layers/InputLayer.cpp
     Source/Neural/Layers/InputLayer.h
+    Source/Neural/Layers/OutputLayer.cpp
+    Source/Neural/Layers/OutputLayer.h
     Source/Neural/Layers/SigmoidActivationLayer.cpp
     Source/Neural/Layers/SigmoidActivationLayer.h
 	)

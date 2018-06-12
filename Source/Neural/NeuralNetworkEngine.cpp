@@ -21,28 +21,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 ///////////////////////////////////////////////////////////////////////////////
-#include "InputLayer.h"
+#include "Neural/NeuralNetworkEngine.h"
 
 using namespace equanimity;
-
-InputLayer::Builder& InputLayer::Builder::Size(unsigned size)
-{
-    _size = size;
-    return *this;
-}
-
-std::unique_ptr<NeuralNetworkLayer> InputLayer::Builder::Build()
-{
-    return std::make_unique<InputLayer>(_size);
-}
-
-InputLayer::InputLayer(unsigned size) :
-    NeuralNetworkLayer(size),
-    _values(size, 0.0f)
-{
-}
-
-float* InputLayer::GetValuesBuffer()
-{
-    return _values.data();
-}

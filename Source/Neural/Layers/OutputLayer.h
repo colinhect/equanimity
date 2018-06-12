@@ -21,28 +21,39 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 ///////////////////////////////////////////////////////////////////////////////
-#include "InputLayer.h"
+#pragma once
 
-using namespace equanimity;
+#include <vector>
 
-InputLayer::Builder& InputLayer::Builder::Size(unsigned size)
+#include "Neural/NeuralNetworkLayer.h"
+#include "Neural/NeuralNetworkLayerBuilder.h"
+
+namespace equanimity
 {
-    _size = size;
-    return *this;
-}
 
-std::unique_ptr<NeuralNetworkLayer> InputLayer::Builder::Build()
+class OutputLayer :
+    public NeuralNetworkLayer
 {
-    return std::make_unique<InputLayer>(_size);
-}
+public:
+    class Builder :
+        public NeuralNetworkLayerBuilder
+    {
+    public:
+        Builder& Size(unsigned size);
 
-InputLayer::InputLayer(unsigned size) :
-    NeuralNetworkLayer(size),
-    _values(size, 0.0f)
-{
-}
+        std::unique_ptr<NeuralNetworkLayer> Build() override;
 
-float* InputLayer::GetValuesBuffer()
-{
-    return _values.data();
+    private:
+        unsigned _size{ 0 };
+    };
+
+    OutputLayer(unsigned size);
+
+    float* GetValuesBuffer();
+
+private:
+    unsigned _size;
+    std::vector<float> _values;
+};
+
 }

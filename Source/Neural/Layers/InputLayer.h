@@ -49,6 +49,8 @@ public:
 
     InputLayer(unsigned size);
 
+    float* GetValuesBuffer();
+
 private:
     unsigned _size;
     std::vector<float> _values;

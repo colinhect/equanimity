@@ -21,28 +21,50 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 ///////////////////////////////////////////////////////////////////////////////
-#include "InputLayer.h"
+#pragma once
 
-using namespace equanimity;
+#include "Neural/NeuralNetwork.h"
 
-InputLayer::Builder& InputLayer::Builder::Size(unsigned size)
+namespace equanimity
 {
-    _size = size;
-    return *this;
-}
 
-std::unique_ptr<NeuralNetworkLayer> InputLayer::Builder::Build()
+class NeuralNetworkEngine
 {
-    return std::make_unique<InputLayer>(_size);
-}
+public:
 
-InputLayer::InputLayer(unsigned size) :
-    NeuralNetworkLayer(size),
-    _values(size, 0.0f)
-{
-}
+    const std::vector<float>& FeedForward(NeuralNetwork& network, const std::vector<float>& inputs);
 
-float* InputLayer::GetValuesBuffer()
-{
-    return _values.data();
+    void Prepare(NeuralNetwork& network) { }
+    void Input(const std::vector<float>& inputs)
+    {
+        _inputs = &inputs;
+        _values = inputs;
+    }
+
+    void Sigmoid(const std::vector<float>& weights, const std::vector<float>& biases)
+    {
+        std::vector<float>& inputs = _values;
+        std::vector<float>& outputs = _tempValues;
+        outputs.clear();
+        outputs.resize(biases.size(), 0.0f);
+        
+        const size_t inputSize = _values.size();
+        const size_t outputSize = biases.size();
+        for (size_t inputIndex = 0; inputIndex < inputSize; ++inputIndex)
+        {
+            for (size_t outputIndex = 0; outputIndex < outputSize; ++outputIndex)
+            {
+                outputs[outputIndex] += inputs[inputIndex] * weights[inputIndex * outputSize + outputIndex];
+            }
+        }
+
+
+    }
+
+private:
+    const std::vector<float>* _inputs{ nullptr };
+    std::vector<float> _values;
+    std::vector<float> _tempValues;
+};
+
 }
